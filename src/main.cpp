@@ -12,14 +12,14 @@
 
 std::unique_ptr<Yolo> yolov8Seg(new Yolo());
 
-// ¶¨Òå¶ÓÁĞ´óĞ¡£¬±ÜÃâÄÚ´æÎŞÏŞÖÆÔö³¤
+// å®šä¹‰é˜Ÿåˆ—å¤§å°ï¼Œé¿å…å†…å­˜æ— é™åˆ¶å¢é•¿
 const int QUEUE_MAX_SIZE = 10;
 std::queue<cv::Mat> frameQueue;
 std::mutex mtx;
 std::condition_variable cv_frame;
 bool stopProcessing = false;
 
-// ¶ÁÈ¡ÊÓÆµÖ¡µÄº¯Êı
+// è¯»å–è§†é¢‘å¸§çš„å‡½æ•°
 void readFrames(cv::VideoCapture& cap) {
     while (true) {
         std::unique_lock<std::mutex> lock(mtx);
@@ -43,7 +43,7 @@ void readFrames(cv::VideoCapture& cap) {
     }
 }
 
-// ´¦ÀíÊÓÆµÖ¡µÄº¯Êı
+// å¤„ç†è§†é¢‘å¸§çš„å‡½æ•°
 void processFrames() {
     while (true) {
         std::unique_lock<std::mutex> lock(mtx);
@@ -60,10 +60,10 @@ void processFrames() {
 
         std::vector<Object> objects;
 
-        // ¼ÇÂ¼¿ªÊ¼Ê±¼ä
+        // è®°å½•å¼€å§‹æ—¶é—´
         auto start = std::chrono::high_resolution_clock::now();
 
-        // µ÷ÓÃ detect º¯Êı
+        // è°ƒç”¨ detect å‡½æ•°
         objects.clear();
         yolov8Seg->detect(frame, objects);
 
@@ -76,17 +76,17 @@ void processFrames() {
 
         yolov8Seg->draw_fps(frame);
 
-        // ¼ÇÂ¼½áÊøÊ±¼ä
+        // è®°å½•ç»“æŸæ—¶é—´
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> elapsed = end - start;
 
-        // Êä³ö´¦ÀíÊ±¼ä
+        // è¾“å‡ºå¤„ç†æ—¶é—´
         std::cout << "Processing time per frame: " << elapsed.count() << " ms" << std::endl;
 
-        // ÏÔÊ¾µ±Ç°Ö¡
+        // æ˜¾ç¤ºå½“å‰å¸§
         cv::imshow("YOLOv8 Segmentation - Video", frame);
 
-        // °´ÏÂ 'q' ¼üÍË³ö
+        // æŒ‰ä¸‹ 'q' é”®é€€å‡º
         if (cv::waitKey(1) == 'q') {
             stopProcessing = true;
             cv_frame.notify_all();
@@ -134,10 +134,10 @@ int main(int argc, char* argv[]) {
     else if (mode == "video") {
         cv::VideoCapture cap;
         if (path == "0") {
-            cap.open(0);  // ´ò¿ªÄ¬ÈÏÉãÏñÍ·
+            cap.open(0);  // æ‰“å¼€é»˜è®¤æ‘„åƒå¤´
         }
         else {
-            cap.open(path);  // ´ò¿ªÊÓÆµÎÄ¼ş
+            cap.open(path);  // æ‰“å¼€è§†é¢‘æ–‡ä»¶
         }
 
         if (!cap.isOpened()) {
@@ -145,11 +145,11 @@ int main(int argc, char* argv[]) {
             return -1;
         }
 
-        // ´´½¨¶ÁÈ¡ºÍ´¦ÀíÖ¡µÄÏß³Ì
+        // åˆ›å»ºè¯»å–å’Œå¤„ç†å¸§çš„çº¿ç¨‹
         std::thread readerThread(readFrames, std::ref(cap));
         std::thread processorThread(processFrames);
 
-        // µÈ´ıÏß³Ì½áÊø
+        // ç­‰å¾…çº¿ç¨‹ç»“æŸ
         readerThread.join();
         processorThread.join();
 
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
         cv::destroyAllWindows();
     }
     else {
-        std::cerr << "Invalid mode. Use 'single' or 'folder'." << std::endl;
+        std::cerr << "Invalid mode. Use 'image' or 'video'." << std::endl;
         return -1;
     }
 
