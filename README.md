@@ -10,7 +10,7 @@
 
 
 
-本仓库的代码修改自仓库[ncnn-android-yolov8-seg](https://github.com/455670288/ncnn-android-yolov8-seg)。原仓库代码部署在安卓端，对于只希望使用yolov8-seg进行实例分割推理的人来说并不直观，因此我把该仓库中和yolov8-seg推理部分的代码提取出来，不依赖android平台即可运行。
+本仓库的代码修改自仓库[ncnn-android-yolov8-seg](https://github.com/Digital2Slave/ncnn-android-yolov8-seg)。原仓库代码部署在安卓端，对于只希望使用yolov8-seg进行实例分割推理的人来说并不直观，因此我把该仓库中和yolov8-seg推理部分的代码提取出来，不依赖android平台即可运行。
 
 可以对图片和视频流进行推理。
 
@@ -61,4 +61,4 @@ cd bin
 
 ## Reference
 
-- [ncnn-android-yolov8-seg](https://github.com/455670288/ncnn-android-yolov8-seg)
+- [ncnn-android-yolov8-seg](https://github.com/Digital2Slave/ncnn-android-yolov8-seg)
